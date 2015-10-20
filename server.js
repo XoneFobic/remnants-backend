@@ -8,7 +8,7 @@
 
   // ======================8<-------- cut here ---------------------------- //
 
-  var port = normalizePort(process.env.PORT || '3000');
+  var port = normalizePort(process.env.PORT || '4000');
   app.set('port', port);
 
   var server = http.createServer(app);
@@ -17,6 +17,17 @@
   server.on('listening', onListening);
 
   var io = require('socket.io')(server);
+
+  io.on('connection', function (socket) {
+    var connectionId      = socket.id;
+    var connectionAddress = socket.handshake.address;
+    debug(connectionId + ' connection on ' + connectionAddress);
+
+    socket.emit('handshake', 'Ahoy!');
+    setTimeout(function () {
+      socket.emit('handshake', 'Ahoy! Again');
+    }, 10000);
+  });
 
   // ======================8<-------- cut here ---------------------------- //
 
