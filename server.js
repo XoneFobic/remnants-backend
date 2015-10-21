@@ -23,10 +23,14 @@
     var connectionAddress = socket.handshake.address;
     debug(connectionId + ' connection on ' + connectionAddress);
 
-    socket.emit('handshake', 'Ahoy!');
-    setTimeout(function () {
-      socket.emit('handshake', 'Ahoy! Again');
-    }, 10000);
+    socket.on('disconnect', function () {
+      debug(connectionId + ' disconnected from ' + connectionAddress);
+    });
+
+    socket.on('slack::invite', function(data) {
+      console.log(data);
+    });
+
   });
 
   // ======================8<-------- cut here ---------------------------- //
